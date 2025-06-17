@@ -20,29 +20,20 @@ env:
 jobs:
   tagging:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Create token
-        id: create_token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.WORKFLOW_APP_ID }}
-          private-key: ${{ secrets.WORKFLOW_PRIVATE_KEY }}
-          owner: ${{ github.repository_owner }}
-
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          token: ${{ steps.create_token.outputs.token }}
-          ref: ${{ github.ref }}
 
       - name: Generate version
         id: generate_version
         run: |
-          SUB_VERSION=$(date +'%Y%m%d%H%M%S')
+          SHORT_SHA=$(git rev-parse --short HEAD)
           if [ "${{ github.event_name }}" = "push" ]; then
-            echo "version=${{ env.main_version }}-$SUB_VERSION" >> $GITHUB_OUTPUT
+            echo "version=${{ env.main_version }}-$SHORT_SHA" >> $GITHUB_OUTPUT
           else
-            echo "version=${{ env.main_version }}-${{ inputs.release-channel }}-$SUB_VERSION" >> $GITHUB_OUTPUT
+            echo "version=${{ env.main_version }}-${{ inputs.release-channel }}-$SHORT_SHA" >> $GITHUB_OUTPUT
           fi
         shell: bash
 
@@ -52,5 +43,5 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           TAG_NAME=${{ steps.generate_version.outputs.version }}
           git tag -a $TAG_NAME -m "Release ${{ steps.generate_version.outputs.version }}"
-          git push https://x-access-token:${{ steps.create_token.outputs.token }}@github.com/${{ github.repository }}.git $TAG_NAME
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git $TAG_NAME
         shell: bash
