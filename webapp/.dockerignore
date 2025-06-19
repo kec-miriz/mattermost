@@ -1,0 +1,16 @@
+node_modules
+dist
+build
+
+.git
+.gitignore
+
+.DS_Store
+*.swp
+
+tests
+docs
+
+Dockerfile
+docker-compose.yml
+.dockerignore
