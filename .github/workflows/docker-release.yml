@@ -43,8 +43,8 @@ jobs:
           context: ./server/build
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ github.repository }}-server:latest
-            ghcr.io/${{ github.repository_owner }}/${{ github.repository }}-server:${{ steps.version.outputs.image_version }}
+            ghcr.io/${{ github.repository }}-server:latest
+            ghcr.io/${{ github.repository }}-server:${{ steps.version.outputs.image_version }}
 
       - name: Build and push webapp Docker image
         uses: docker/build-push-action@v6
@@ -53,5 +53,5 @@ jobs:
           context: ./webapp
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ github.repository }}-websocket:latest
-            ghcr.io/${{ github.repository_owner }}/${{ github.repository }}-websocket:${{ steps.version.outputs.image_version }}
+            ghcr.io/${{ github.repository }}-websocket:latest
+            ghcr.io/${{ github.repository }}-websocket:${{ steps.version.outputs.image_version }}
