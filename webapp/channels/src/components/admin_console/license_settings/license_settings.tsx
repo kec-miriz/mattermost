@@ -46,7 +46,6 @@ type Props = {
     isDisabled: boolean;
     prevTrialLicense: ClientLicense;
     environmentConfig: Partial<EnvironmentConfig>;
-    isMySql: boolean;
     actions: {
         getLicenseConfig: () => void;
         uploadLicense: (file: File) => Promise<ActionResult>;
@@ -290,7 +289,7 @@ export default class LicenseSettings extends React.PureComponent<Props, State> {
     );
 
     render() {
-        const {license, upgradedFromTE, isDisabled, isMySql} = this.props;
+        const {license, upgradedFromTE, isDisabled} = this.props;
 
         let leftPanel = null;
         let rightPanel = null;
@@ -374,7 +373,6 @@ export default class LicenseSettings extends React.PureComponent<Props, State> {
                             />
                             {!this.state.clickNormalUpgradeBtn && license.IsLicensed !== 'true' &&
                                 this.props.prevTrialLicense?.IsLicensed !== 'true' &&
-                                !isMySql &&
                                 <TrialBanner
                                     isDisabled={isDisabled}
                                     gettingTrialResponseCode={this.state.gettingTrialResponseCode}
